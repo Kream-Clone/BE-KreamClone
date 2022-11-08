@@ -1,6 +1,13 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+} // (1) queryDSL setting
+
 plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // (2) queryDSL setting
     id 'java'
 }
 
@@ -30,8 +37,34 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // (3) queryDSL setting
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def querydslDir = "$buildDir/generated/querydsl" // (3)
+
+querydsl { // (4) queryDSL setting
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets { // (5) queryDSL setting
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl { // (6) queryDSL setting
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations { // (7) queryDSL setting
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
