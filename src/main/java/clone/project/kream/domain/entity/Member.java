@@ -1,10 +1,7 @@
 package clone.project.kream.domain.entity;
 
 import clone.project.kream.service.dto.request.MemberRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -18,6 +15,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 public class Member {
 
     @Id

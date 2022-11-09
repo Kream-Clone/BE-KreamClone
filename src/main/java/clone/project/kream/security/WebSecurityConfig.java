@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity()
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
@@ -134,10 +134,10 @@ public class WebSecurityConfig {
         skipPathList.add("GET,/JS/**");
 
         // 회원 관리 API SKIP 적용
-        skipPathList.add("POST,/api/v1/signup");
+        skipPathList.add("POST,/join");
 
         // Post 게시글 관련
-        skipPathList.add("GET,/api/v1/social/**");
+        skipPathList.add("GET,/social/**");
 
         //기본 페이지 설정
         skipPathList.add("GET,/");
@@ -163,7 +163,6 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://dev-job-liard.vercel.app");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
         configuration.setAllowCredentials(true);

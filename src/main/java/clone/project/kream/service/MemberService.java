@@ -4,12 +4,10 @@ import clone.project.kream.Exception.CustomException;
 import clone.project.kream.Exception.ErrorCode;
 import clone.project.kream.domain.entity.Member;
 import clone.project.kream.domain.repository.MemberRepository;
-import clone.project.kream.security.UserDetailsImpl;
 import clone.project.kream.security.jwt.JwtTokenUtils;
 import clone.project.kream.service.dto.request.LoginRequestDto;
 import clone.project.kream.service.dto.request.MemberRequestDto;
 import clone.project.kream.service.dto.response.LoginResponseDto;
-import clone.project.kream.service.dto.response.MemberResponseDto;
 import clone.project.kream.service.dto.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
-import java.security.AuthProvider;
 import java.util.Optional;
 
 @Transactional
@@ -31,6 +28,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
     public ResponseDto<?> createMember(MemberRequestDto memberRequestDto) {
         Member member = new Member(memberRequestDto);
+        String rawPassword = member.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        member.setPassword(encPassword);
         memberRepository.save(member);
 
         return ResponseDto.success("회원가입에 성공하였습니다.");
