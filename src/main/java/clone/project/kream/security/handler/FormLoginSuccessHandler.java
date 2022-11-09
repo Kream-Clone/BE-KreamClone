@@ -24,11 +24,12 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
 
     private ObjectMapper mapper = new ObjectMapper();
 
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         final UserDetailsImpl userDetails = ( (UserDetailsImpl) authentication.getPrincipal());
-        final String token = JwtTokenUtils.generateJwtToken(userDetails);
+        final String token = JwtTokenUtils.generateJwtToken(userDetails.getUser());
 //        final String refreshTokenStr = JwtTokenUtils.generateJwtRefreshToken();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");

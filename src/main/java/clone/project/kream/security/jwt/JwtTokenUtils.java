@@ -1,14 +1,16 @@
 package clone.project.kream.security.jwt;
 
+import clone.project.kream.domain.entity.Member;
 import clone.project.kream.security.UserDetailsImpl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 import static org.springframework.security.config.Elements.JWT;
 
-
+@Component
 public final class JwtTokenUtils {
 
     private static final int SEC = 1;
@@ -30,13 +32,13 @@ public final class JwtTokenUtils {
     public static final String CLAIM_USER_ROLE = "USER_ROLE";
     public static final String JWT_SECRET = "jwt_secret_!@#$%";
 
-    public static String generateJwtToken(UserDetailsImpl userDetails){
+    public static String generateJwtToken(Member member){
         String token = null;
 
         try{
             token= com.auth0.jwt.JWT.create()
                     .withIssuer("RECRUIT_PAGE")
-                    .withClaim(CLAIM_USER_NAME,userDetails.getUsername())
+                    .withClaim(CLAIM_USER_NAME,member.getEmail())
                     .withClaim(CLAIM_EXPIRED_DATE,new Date(System.currentTimeMillis() + JWT_TOKEN_VALID_MILLI_SEC))
                     .sign(generateAlgorithm());
         }

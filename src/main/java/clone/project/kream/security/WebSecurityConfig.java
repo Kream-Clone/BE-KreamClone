@@ -67,7 +67,8 @@ public class WebSecurityConfig {
                         "/swagger-resources/**",
                         "/swagger/**",
                         "/h2-console/**",
-                        "/join");
+                        "/join",
+                        "/login");
     }
 
     @Bean
@@ -136,7 +137,7 @@ public class WebSecurityConfig {
         skipPathList.add("POST,/api/v1/signup");
 
         // Post 게시글 관련
-        skipPathList.add("GET,/api/v1/posts/**");
+        skipPathList.add("GET,/api/v1/social/**");
 
         //기본 페이지 설정
         skipPathList.add("GET,/");
