@@ -1,6 +1,5 @@
 package clone.project.kream.security;
 
-
 import clone.project.kream.security.filter.FormLoginFilter;
 import clone.project.kream.security.filter.JwtAuthFilter;
 import clone.project.kream.security.handler.AuthenticationFailHandler;
@@ -66,9 +65,7 @@ public class WebSecurityConfig {
                         "/webjars/**",
                         "/swagger-resources/**",
                         "/swagger/**",
-                        "/h2-console/**",
-                        "/join",
-                        "/login");
+                        "/h2-console/**");
     }
 
     @Bean
@@ -116,7 +113,7 @@ public class WebSecurityConfig {
     @Bean
     public FormLoginFilter formLoginFilter() throws Exception {
         FormLoginFilter formLoginFilter = new FormLoginFilter(authenticationManager(authenticationConfiguration));
-        formLoginFilter.setFilterProcessesUrl("/api/v1/login");
+        formLoginFilter.setFilterProcessesUrl("/login");
         formLoginFilter.setAuthenticationFailureHandler(formLoginFailureHandler);
         formLoginFilter.setAuthenticationSuccessHandler(formLoginSuccessHandler);
         formLoginFilter.afterPropertiesSet();
@@ -135,6 +132,7 @@ public class WebSecurityConfig {
 
         // 회원 관리 API SKIP 적용
         skipPathList.add("POST,/join");
+        skipPathList.add("POST,/login");
 
         // Post 게시글 관련
         skipPathList.add("GET,/social/**");

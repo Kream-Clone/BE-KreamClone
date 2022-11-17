@@ -5,6 +5,7 @@ import clone.project.kream.security.jwt.JwtTokenUtils;
 import clone.project.kream.service.dto.response.LoginInfoDto;
 import clone.project.kream.service.dto.response.ResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -16,11 +17,12 @@ import java.io.IOException;
 
 
 @Component
+@RequiredArgsConstructor
 public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
     public static final String AUTH_HEADER = "Authorization";
     public static final String TOKEN_TYPE = "BEARER";
-    public static final String AUTH_REFRESH_HEADER = "Refresh";
+    private final JwtTokenUtils jwtTokenUtils;
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -29,7 +31,7 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
 
         final UserDetailsImpl userDetails = ( (UserDetailsImpl) authentication.getPrincipal());
-        final String token = JwtTokenUtils.generateJwtToken(userDetails.getUser());
+        final String token = jwtTokenUtils.generateJwtToken(userDetails.getUser());
 //        final String refreshTokenStr = JwtTokenUtils.generateJwtRefreshToken();
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");

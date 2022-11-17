@@ -10,6 +10,7 @@ import clone.project.kream.service.dto.request.MemberRequestDto;
 import clone.project.kream.service.dto.response.LoginResponseDto;
 import clone.project.kream.service.dto.response.ResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import java.util.Optional;
 @Transactional
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberService {
 
     private final JwtTokenUtils jwtTokenUtils;
@@ -27,6 +29,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     public ResponseDto<?> createMember(MemberRequestDto memberRequestDto) {
+        log.info("id = {}", memberRequestDto.getEmail());
         Member member = new Member(memberRequestDto);
         String rawPassword = member.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
