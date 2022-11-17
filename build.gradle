@@ -1,6 +1,13 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+} // (1) queryDSL setting
+
 plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // (2) queryDSL setting
     id 'java'
 }
 
@@ -20,11 +27,13 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
+    implementation 'org.jsoup:jsoup:1.15.3' // 크롤링
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.3'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -36,8 +45,35 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
     compileOnly 'com.auth0:java-jwt:3.19.2'
+
+    // (3) queryDSL setting
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def querydslDir = "$buildDir/generated/querydsl" // (3)
+
+querydsl { // (4) queryDSL setting
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets { // (5) queryDSL setting
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl { // (6) queryDSL setting
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations { // (7) queryDSL setting
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+}
+
