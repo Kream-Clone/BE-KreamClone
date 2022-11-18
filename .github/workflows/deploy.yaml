@@ -32,6 +32,9 @@ jobs:
         env:
           jwt.secret: ${{ secrets.JWT_SECRET }}
           jwt.expiration.access.token: ${{ secrets.JWT_EXPIRATION_ACCESS_TOKEN }}
+          spring.datasource.url: ${{ secrets.MYSQL_URL }}
+          spring.datasource.username: ${{ secrets.MYSQL_USERNAME }}
+          spring.datasource.password: ${{ secrets.MYSQL_PASSWORD }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
