@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - feat/cicdConfig
-  workflow_dispatch:
 
 env:
   S3_BUCKET_NAME: mingtttu
